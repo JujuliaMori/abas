@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pilha Centralizada 3D</title>
+    <title>Retângulos 3D Centralizados</title>
     <style>
         body {
             margin: 0;
@@ -11,92 +11,98 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #4b0082;
+            background-color: #4b0082; /* Roxo */
             font-family: 'Segoe UI', sans-serif;
             overflow: hidden;
         }
 
-        /* Bola Amarela Centralizada */
+        /* Bola Amarela */
         .circle-container {
-            width: 450px;
-            height: 450px;
+            width: 480px;
+            height: 480px;
             background: #ffcc00;
             border-radius: 50%;
             display: flex;
-            justify-content: center; /* Centraliza horizontalmente */
-            align-items: center;     /* Centraliza verticalmente */
+            justify-content: center; /* Centralização horizontal */
+            align-items: center;     /* Centralização vertical */
             position: relative;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.4);
             cursor: pointer;
+            perspective: 2000px;
         }
 
-        /* Wrapper da Pilha */
+        /* Container da Pilha (sem tamanho para não deslocar o centro) */
         .stack-wrapper {
             position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Folhas */
+        /* Transformação em RETÂNGULOS (mais altos e estreitos) */
         .sheet {
             position: absolute;
-            width: 150px;
-            height: 210px;
-            border-radius: 12px;
+            width: 130px;  /* Largura menor */
+            height: 250px; /* Altura maior para formato retangular */
+            border-radius: 6px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: all 0.6s ease;
+            transition: all 0.7s cubic-bezier(0.25, 1, 0.5, 1);
             border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+            box-shadow: -8px 8px 20px rgba(0,0,0,0.15);
+            transform-origin: center center; /* Rotação pelo centro para melhor equilíbrio */
         }
 
-        /* Estado Inicial Empilhado e Centralizado */
+        /* Estado Inicial: Retângulos Inclinados para a Direita */
         .sheet:nth-child(1) { 
             background: rgba(255, 255, 255, 1); 
             z-index: 3; 
-            transform: rotateX(50deg) rotateZ(-5deg);
+            transform: rotateX(50deg) rotateY(20deg) rotateZ(15deg) translateZ(30px);
         }
         .sheet:nth-child(2) { 
             background: rgba(255, 255, 255, 0.6); 
             backdrop-filter: blur(4px);
             z-index: 2; 
-            transform: rotateX(50deg) rotateZ(-5deg) translate(8px, 8px);
+            transform: rotateX(50deg) rotateY(20deg) rotateZ(15deg) translateZ(10px) translate(-10px, 10px);
         }
         .sheet:nth-child(3) { 
             background: rgba(255, 255, 255, 0.2); 
             backdrop-filter: blur(8px);
             z-index: 1; 
-            transform: rotateX(50deg) rotateZ(-5deg) translate(16px, 16px);
+            transform: rotateX(50deg) rotateY(20deg) rotateZ(15deg) translate(-20px, 20px);
         }
 
+        /* Texto escondido */
         .sheet span, .sheet p {
             opacity: 0;
             color: #4b0082;
             font-weight: bold;
-            margin: 5px 0;
+            margin: 10px 0;
+            transition: opacity 0.4s;
+            text-align: center;
         }
 
-        /* --- Hover: Espaçamento e Aumento --- */
+        /* --- Hover: Efeito de Abertura --- */
 
-        /* Cria o espaço entre as abas ao abrir */
         .circle-container:hover .sheet {
             background: rgba(255, 255, 255, 1);
-            transform: rotateX(0) rotateZ(0) scale(1.15); /* Aumentam de tamanho */
-            position: relative; /* Sai do empilhamento fixo */
-            margin: 0 25px;    /* ESQUERDA/DIREITA: Garante o espaço entre elas */
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.3);
+            transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); /* Ficam retos */
         }
+
+        /* Espaçamento entre os retângulos ao abrir */
+        .circle-container:hover .sheet:nth-child(1) { transform: translateX(-170px) scale(1.1); }
+        .circle-container:hover .sheet:nth-child(2) { transform: translateY(-15px) scale(1.2); z-index: 10; }
+        .circle-container:hover .sheet:nth-child(3) { transform: translateX(170px) scale(1.1); }
 
         .circle-container:hover .sheet span,
         .circle-container:hover .sheet p {
             opacity: 1;
         }
 
-        .sheet span { font-size: 2.5rem; }
+        .sheet span { font-size: 3rem; }
     </style>
 </head>
 <body>
